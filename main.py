@@ -1,15 +1,16 @@
 import os
 
-import fetcher
+import dotenv
 
-from dotenv import load_dotenv
+from page_parser import PageParser
+from change_watcher import ChangeWatcher
 
 if __name__ == '__main__':
-    load_dotenv()
+    parser = PageParser()
+    cw = ChangeWatcher()
+    element = parser.get_child_element("ul")
+    count = cw.count_items(element, "li")
 
-    soup = fetcher.get_soup(os.getenv('TARGET_URL'))
-    ulist = fetcher.get_ulist(soup, os.getenv('ELEMENT_ID'))
-    count = fetcher.count_list_items(ulist)
-
-    # if count > int(os.getenv('TOTAL_ITEMS')):
-    # TODO trigger notification
+    if count > int(os.environ["TOTAL_ITEMS"]):
+        print(count)
+        # dotenv.set_key(env_file, "TOTAL_ITEMS", str(count))
