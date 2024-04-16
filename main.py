@@ -1,9 +1,15 @@
-import sys
+import os
 
 import fetcher
 
+from dotenv import load_dotenv
 
 if __name__ == '__main__':
-    soup = fetcher.get_soup(sys.argv[1])
-    ulist = fetcher.get_ulist(soup, sys.argv[2])
-    # TODO trigger notification if len(ulist) > os.getenv('TOTAL_ITEMS')
+    load_dotenv()
+
+    soup = fetcher.get_soup(os.getenv('TARGET_URL'))
+    ulist = fetcher.get_ulist(soup, os.getenv('ELEMENT_ID'))
+    count = fetcher.count_list_items(ulist)
+
+    # if count > int(os.getenv('TOTAL_ITEMS')):
+    # TODO trigger notification
